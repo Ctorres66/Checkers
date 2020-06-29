@@ -38,6 +38,7 @@ public class setup {
 		JFrame board = new JFrame("Checkerboard");
 		board.setSize(800, 800);
 		board.add(gridPanel);
+		board.setResizable(false);
 		board.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		board.setVisible(true);
 		

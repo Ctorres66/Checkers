@@ -2,9 +2,9 @@ package checkers;
 
 import java.awt.Color;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -14,7 +14,8 @@ public class main {
 			static ImageIcon black_king_image = new ImageIcon("C:/Users/ctorr/git/Checkers/checkers/src/resources/black_king.png");
 			static ImageIcon red_piece_image = new ImageIcon("C:/Users/ctorr/git/Checkers/checkers/src/resources/red_piece.png");
 			static ImageIcon red_king_image = new ImageIcon("C:/Users/ctorr/git/Checkers/checkers/src/resources/red_king.png");
-	
+			static ArrayList<Integer> movement_pieces = new ArrayList<Integer>();
+			static boolean movementCheck = false;
 	//------------------------------------main code---------------------------------------------------//
 	public static void main(String args[]) 
 	{
@@ -28,19 +29,22 @@ public class main {
 	//Moves piece from tile A to tile B
 	private static void Move(JButton[] buttons, int a, int b)
 	{
+		movement_pieces.clear();
+		buttons[a].setActionCommand("unpressed");
+		buttons[a].setActionCommand("unpressed");
 		if (buttons[a].getIcon() != null && buttons[b].getIcon() == null)
 		{
 			buttons[b].setIcon(buttons[a].getIcon());
 			buttons[a].setIcon(null);
 		}
+		else 
+		{System.out.println("Invalid Move");}
 		UpgradeCheck(buttons, b);
-		buttons[a].setActionCommand("unpressed");
-		buttons[b].setActionCommand("unpressed");
 	}
 	
 	//-------------------------------------------------------------------------------------------------//
+	//Kills a piece and verifies if its the final piece of that side//
 	private boolean DeathAndCheck(JButton[] buttons, final int j)
-	//Kills a piece and verifies if its the final piece of that side 
 	{	
 		if(buttons[j].getIcon() == black_piece_image || buttons[j].getIcon() == black_king_image)
 		{
@@ -62,7 +66,10 @@ public class main {
 	//Calculates and returns the possible moves that one specific piece can make
 	private int[] PossibleMoves(JButton[] buttons, int i)
 	{
-		if(buttons[i].getIcon() == null) {return null;}
+		if(buttons[i].getIcon() == black_piece_image) {return null;}
+		else if(buttons[i].getIcon() == red_piece_image) {return null;}
+		else if(buttons[i].getIcon() == black_king_image) {return null;}
+		else if(buttons[i].getIcon() == red_king_image) {return null;}
 		return null;
 	}
 	//-------------------------------------------------------------------------------------------------------//
@@ -122,12 +129,15 @@ public class main {
 	}
 	
 	//-------------------------------------------------------------------------------------------------------//
+	//Verifies if a specific piece is viable to be uprgraded to king and does so if its true//
 	 private static void UpgradeCheck (JButton[] buttons, int a)
 	 {
 		 if (a < 8 && buttons[a].getIcon() == red_piece_image)
-		 {buttons[a].setIcon(red_king_image);}
+		 {buttons[a].setIcon(red_king_image);
+		 System.out.println("The red side uprgraded one of their pieces to a king!");}
 		 else if (a > 56 && buttons[a].getIcon() == black_piece_image)
-		 {buttons[a].setIcon(black_king_image);}
+		 {buttons[a].setIcon(black_king_image);
+		 System.out.println("The black side uprgraded one of their pieces to a king!");}
 		 }
 	//--------------------------------------------------------------------------------------------------------//
 	//set up interactions between buttons//
@@ -137,40 +147,43 @@ public class main {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					boolean movementCheck = false;
-					int first = 0;
-					int second = 0;
 					String state = e.getActionCommand();
 					if (state == "unpressed")
 					{
-						for (int i = 0; i < 64; i++)
+						for(int i = 0; i < 64; i++)
 						{
-							if (e.getSource().equals(buttons[i]) == false)
-							{
-								if(buttons[i].getActionCommand() == "pressed")
-								{
-								first = i;
-								movementCheck = true;
-								}
-							}
-							else
+							if (e.getSource().equals(buttons[i]))
 							{
 								buttons[i].setActionCommand("pressed");
-								second = i;
-							}	
+								movement_pieces.add(i);
+								if(movement_pieces.size()==4) 
+								{
+								Move(buttons, movement_pieces.get(1), movement_pieces.get(2));
+								buttons[i].setActionCommand("unpressed");
+								}
+								System.out.println(movement_pieces);
+							}
 						}
-						if(movementCheck == true)
+					}
+					else if (state == "pressed")
+					{
+						for (int i = 0; i < 64; i++)
 						{
-							Move(buttons, first, second);
+							if (e.getSource().equals(buttons[i]))
+							{
+								buttons[i].setActionCommand("unpressed");
+								movement_pieces.clear();
+								System.out.println(movement_pieces);
+							}
 						}
+					}
 				}
-				}
-			};
+				};
 			for (int i = 0; i< 64; i++)
 			{
 				buttons[i].addActionListener(test);
 				buttons[i].setActionCommand("unpressed");
 			}
+}
 		}
 	//-------------------------------------------------------------------------------------------------------//
-}

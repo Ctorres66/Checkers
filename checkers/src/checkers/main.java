@@ -49,6 +49,7 @@ public class main {
 		if(buttons[j].getIcon() == black_piece_image || buttons[j].getIcon() == black_king_image)
 		{
 			buttons[j].setIcon(null);
+			System.out.println("A black piece has been killed!");
 			for (int i = 0; i <64; i++)
 			{if(buttons[i].getIcon() == black_piece_image || buttons[i].getIcon() == black_king_image) {return false;}}
 		}
@@ -56,6 +57,7 @@ public class main {
 		else 
 		{
 			buttons[j].setIcon(null);
+			System.out.println("A red piece has been killed!");
 			for (int i = 0; i <64; i++)
 			{if(buttons[i].getIcon() == red_piece_image || buttons[i].getIcon() == red_king_image) {return false;}}
 		}

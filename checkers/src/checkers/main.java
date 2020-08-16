@@ -89,7 +89,7 @@ public class main {
 		return null;
 	}
 	//-------------------------------------------------------------------------------------------------------//
-	//sets up jframe with the pieces on each of the buttons
+	//sets up Jframe with the pieces on each of the buttons
 	private static JButton[] drawCheckerboard() {
 
 		//setting buttons and grid as well as adding each button to the grid

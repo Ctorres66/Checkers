@@ -15,6 +15,7 @@ public class main {
 			static ImageIcon red_piece_image = new ImageIcon("C:/Users/ctorr/git/Checkers/checkers/src/resources/red_piece.png");
 			static ImageIcon red_king_image = new ImageIcon("C:/Users/ctorr/git/Checkers/checkers/src/resources/red_king.png");
 			static ArrayList<Integer> movement_pieces = new ArrayList<Integer>();
+			static ArrayList<Integer> possibleMoves = new ArrayList<Integer>();
 			static boolean movementCheck = false;
 	//------------------------------------main code---------------------------------------------------//
 	public static void main(String args[]) 
@@ -40,6 +41,7 @@ public class main {
 		else 
 		{System.out.println("Invalid Move");}
 		UpgradeCheck(buttons, b);
+		possibleMoves.clear();
 	}
 	
 	//-------------------------------------------------------------------------------------------------//
@@ -68,8 +70,20 @@ public class main {
 	//Calculates and returns the possible moves that one specific piece can make
 	private int[] PossibleMoves(JButton[] buttons, int i)
 	{
-		if(buttons[i].getIcon() == black_piece_image) {return null;}
-		else if(buttons[i].getIcon() == red_piece_image) {return null;}
+		if(buttons[i].getIcon() == black_piece_image)
+		{
+			if (i % 8 == 0) {possibleMoves.add(i + 9);}
+			else if (i % 8 == 6) {possibleMoves.add(i + 7);}
+			else {possibleMoves.add(i + 7);
+				  possibleMoves.add(i + 9);}
+		}
+		else if(buttons[i].getIcon() == red_piece_image) 
+		{
+			if (i % 8 == 0) {possibleMoves.add(i - 7);}
+			else if (i % 8 == 6) {possibleMoves.add(i - 9);}
+			else {possibleMoves.add(i + 7);
+				  possibleMoves.add(i + 9);}
+		}
 		else if(buttons[i].getIcon() == black_king_image) {return null;}
 		else if(buttons[i].getIcon() == red_king_image) {return null;}
 		return null;
@@ -91,20 +105,19 @@ public class main {
 			{
 				buttons[i] = new JButton();
 				buttons[i].setSize(100, 100);
-				if((i + 1)% 8 == 0)
-				{
-					buttons[i].setBackground(buttons[i - 1].getBackground());
-				}
+				if((i)% 8 == 0)
+				{buttons[i].setBackground(buttons[i - 1].getBackground());}
 				else 
 				{
 				if (buttons[i - 1].getBackground() == Color.red)
 					{buttons[i].setBackground(Color.black);}
 				else {buttons[i].setBackground(Color.red);}
-				gridPanel.add(buttons[i]);
+				System.out.println(i);
 				}
+				gridPanel.add(buttons[i]);
 			}
 			
-			for(int i = 0; i <= 24; i++)
+			for(int i = 0; i < 24; i++)
 			{
 				if (buttons[i].getBackground() == Color.red)
 				{
